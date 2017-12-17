@@ -17,7 +17,10 @@ var TermSet = (termGroupName) => {
                 term[termName] = {};
             }
             // Set the term
+            let parent = term;
             term = term[termName];
+            // Set the parent
+            term.parent = parent;
             // Remove the term from the path
             path.splice(0, 1);
         }
