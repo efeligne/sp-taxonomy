@@ -1,13 +1,13 @@
 /**
  * Term Set
  */
-var TermSet = () => {
+var TermSet = (termGroupName) => {
     SP.SOD.executeFunc("sp.js", "sp.Utilities.Utility", () => {
         // Ensure the taxonomy script is loaded
         SP.SOD.registerSOD("sp.taxonomy.js", SP.Utilities.Utility.getLayoutsPageUrl("sp.taxonomy.js"));
         SP.SOD.executeFunc("sp.taxonomy.js", "SP.Taxonomy.TaxonomySession", () => {
             // Load the terms
-            this.loadTerms().then(termSet => {
+            this.loadTerms(termGroupName).then(termSet => {
                 // This is where your code goes
             });
         });
@@ -76,11 +76,9 @@ var TermSet = () => {
         return terms;
     };
     // Method to load the terms
-    let loadTerms = () => {
+    let loadTerms = (termGroupName) => {
         // Return a promise
         return new Promise((resolve, reject) => {
-            // Define the target term group
-            let termGroupName = "My Terms";
             // Get the taxonomy session
             let context = SP.ClientContext.get_current();
             let session = SP.Taxonomy.TaxonomySession.getTaxonomySession(context);
