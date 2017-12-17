@@ -12,13 +12,14 @@ interface ITermInfo {
     path: string;
     props: {
         Prop1: string;
-        Prop2: number;
+        Prop2: string;
         Prop3: string;
     }
 }
 
 interface ITermSet {
-    info: ITermInfo
+    info: ITermInfo;
+    parent?: ITermSet;
 }
 
 
@@ -43,6 +44,9 @@ var TermSet = (termGroupName: string): PromiseLike<ITermSet> => {
 
             // Set the term
             term = term[termName];
+
+            // Set the parent
+            term.parent = termSet;
 
             // Remove the term from the path
             path.splice(0, 1);
