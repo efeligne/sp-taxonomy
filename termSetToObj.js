@@ -2,16 +2,6 @@
  * Term Set
  */
 var TermSet = (termGroupName) => {
-    SP.SOD.executeFunc("sp.js", "sp.Utilities.Utility", () => {
-        // Ensure the taxonomy script is loaded
-        SP.SOD.registerSOD("sp.taxonomy.js", SP.Utilities.Utility.getLayoutsPageUrl("sp.taxonomy.js"));
-        SP.SOD.executeFunc("sp.taxonomy.js", "SP.Taxonomy.TaxonomySession", () => {
-            // Load the terms
-            this.loadTerms(termGroupName).then(termSet => {
-                // This is where your code goes
-            });
-        });
-    });
     /**
      * Methods
      */
@@ -102,4 +92,18 @@ var TermSet = (termGroupName) => {
             });
         });
     };
+    // Return a promise
+    return new Promise((resolve, reject) => {
+        SP.SOD.executeFunc("sp.js", "sp.Utilities.Utility", () => {
+            // Ensure the taxonomy script is loaded
+            SP.SOD.registerSOD("sp.taxonomy.js", SP.Utilities.Utility.getLayoutsPageUrl("sp.taxonomy.js"));
+            SP.SOD.executeFunc("sp.taxonomy.js", "SP.Taxonomy.TaxonomySession", () => {
+                // Load the terms
+                this.loadTerms(termGroupName).then(termSet => {
+                    // Resolve the promise
+                    resolve(termSet);
+                });
+            });
+        });
+    });
 };
