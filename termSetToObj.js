@@ -31,10 +31,10 @@ var TermSet = (termGroupName) => {
         for (let i = 0; i < termInformation.length; i++) {
             let term = termInformation[i];
             // Add the term to the term set
-            this.addTermToSet(termSet, term, term.path.split("/"));
-            // Return the term set
-            return termSet;
+            addTermToSet(termSet, term, term.path.split("/"));
         }
+        // Return the term set
+        return termSet;
     };
     // Method to get the term information
     let getTermInfo = (terms) => {
@@ -62,8 +62,8 @@ var TermSet = (termGroupName) => {
             }
             return 0;
         });
-        // Return the terms
-        return terms;
+        // Return the term information
+        return termInformation;
     };
     // Method to load the terms
     let loadTerms = (termGroupName) => {
@@ -81,9 +81,9 @@ var TermSet = (termGroupName) => {
             // Success
             () => {
                 // Get the term information
-                let termInfo = this.getTermInfo(terms);
-                // Convert the terms to an object and resolve the promise
-                resolve(convertToObject(terms));
+                let termInfo = getTermInfo(terms);
+                // Convert the term information into an object, and resolve the promise
+                resolve(convertToObject(termInfo));
             }, 
             // Error
             (ex, msg) => {
@@ -92,18 +92,32 @@ var TermSet = (termGroupName) => {
             });
         });
     };
+    /**
+     * Main
+     */
     // Return a promise
     return new Promise((resolve, reject) => {
-        SP.SOD.executeFunc("sp.js", "sp.Utilities.Utility", () => {
+        // Ensure the utility class exists
+        if (SP.Utilities && SP.Utilities.Utility) {
             // Ensure the taxonomy script is loaded
-            SP.SOD.registerSOD("sp.taxonomy.js", SP.Utilities.Utility.getLayoutsPageUrl("sp.taxonomy.js"));
+            SP.SOD.registerSod("sp.taxonomy.js", SP.Utilities.Utility.getLayoutsPageUrl("sp.taxonomy.js"));
             SP.SOD.executeFunc("sp.taxonomy.js", "SP.Taxonomy.TaxonomySession", () => {
                 // Load the terms
-                this.loadTerms(termGroupName).then(termSet => {
+                loadTerms(termGroupName).then(termSet => {
                     // Resolve the promise
                     resolve(termSet);
                 });
             });
-        });
+        }
+        else {
+            // Load the utility class
+            SP.SOD.executeFunc("sp.js", "sp.Utilities.Utility", () => {
+                // Get the term set
+                TermSet(termGroupName).then(termSet => {
+                    // Resolve the promise
+                    resolve(termSet);
+                });
+            });
+        }
     });
 };
