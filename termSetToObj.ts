@@ -9,7 +9,7 @@ interface ITermInfo {
     description: string;
     id: string;
     name: string;
-    path: string;
+    path: Array<string>;
     props: {
         Prop1: string;
         Prop2: string;
@@ -66,7 +66,7 @@ var TermSet = (termGroupName: string): PromiseLike<ITermSet> => {
             let term = termInformation[i];
 
             // Add the term to the term set
-            addTermToSet(termSet, term, term.path.split("/"));
+            addTermToSet(termSet, term, term.path);
         }
 
         // Return the term set
@@ -87,7 +87,7 @@ var TermSet = (termGroupName: string): PromiseLike<ITermSet> => {
                 description: term.get_description(),
                 id: term.get_id().toString(),
                 name: term.get_name(),
-                path: term.get_pathOfTerm().replace(/;/g, "/"),
+                path: term.get_pathOfTerm().split(";"),
                 props: term.get_customProperties()
             });
         }

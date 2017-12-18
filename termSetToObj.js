@@ -34,7 +34,7 @@ var TermSet = (termGroupName) => {
         for (let i = 0; i < termInformation.length; i++) {
             let term = termInformation[i];
             // Add the term to the term set
-            addTermToSet(termSet, term, term.path.split("/"));
+            addTermToSet(termSet, term, term.path);
         }
         // Return the term set
         return termSet;
@@ -51,7 +51,7 @@ var TermSet = (termGroupName) => {
                 description: term.get_description(),
                 id: term.get_id().toString(),
                 name: term.get_name(),
-                path: term.get_pathOfTerm().replace(/;/g, "/"),
+                path: term.get_pathOfTerm().split(";"),
                 props: term.get_customProperties()
             });
         }
