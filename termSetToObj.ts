@@ -66,7 +66,7 @@ var TermSet = (termGroupName: string): PromiseLike<ITermSet> => {
             let term = termInformation[i];
 
             // Add the term to the term set
-            addTermToSet(termSet, term, term.path);
+            addTermToSet(termSet, term, Object.create(term.path));
         }
 
         // Return the term set

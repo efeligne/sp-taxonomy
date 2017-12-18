@@ -34,7 +34,7 @@ var TermSet = (termGroupName) => {
         for (let i = 0; i < termInformation.length; i++) {
             let term = termInformation[i];
             // Add the term to the term set
-            addTermToSet(termSet, term, term.path);
+            addTermToSet(termSet, term, Object.create(term.path));
         }
         // Return the term set
         return termSet;
